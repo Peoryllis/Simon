@@ -27,6 +27,7 @@ class Gameboard(tk.Frame):
         
         self.score = 0
 
+#keep track of score
         self.scoreboard = tk.Label(
             self, 
             text='score: 0', 
@@ -37,8 +38,9 @@ class Gameboard(tk.Frame):
             relief='groove'
             )
         
-        self.scoreboard.place(relx=0, rely=0, relwidth=0.25, relheight=0.05)
+        self.scoreboard.place(relx=0, rely=0, relwidth=0.25, relheight=0.05) 
 
+#easy access to specific shades of colors
         self.colors = {
             'yellow': ['#bda800', '#ffe200'],
             'blue': ['#0129bf', '#88c5fc'],
@@ -49,13 +51,31 @@ class Gameboard(tk.Frame):
         self.buttonsFrame = tk.Frame(self, bg=self['bg'])
         self.buttonsFrame.place(relx=0, rely=0.13, relwidth=1, relheight=0.9)
 
-        self.redbutton = tk.Button(
+
+### Create red button 
+        self.redbutton = tk.Label(
             self.buttonsFrame, 
-            bg='#7b0000', 
-            command=lambda e: self.color_selected('r')
+            bg=self.colors['red'][0], 
+            borderwidth=5,
+            relief='raised'
             )
         
         self.redbutton.place(relx=0, rely=0, relwidth=0.5, relheight=0.5)
+        self.redbutton.bind('<Button>', lambda e: self.color_selected('r'))
+
+
+## create yellow button
+        
+        self.yellowbutton = tk.Label(
+            self.buttonsFrame, 
+            bg=self.colors['yellow'][0], 
+            borderwidth=5,
+            relief='raised'
+            )
+        
+        self.yellowbutton.place(relx=0.5, rely=0, relwidth=0.5, relheight=0.5)
+        self.yellowbutton.bind('<Button>', lambda e: self.color_selected('y'))
+
 
     def color_selected(self, color):
         '''
@@ -63,8 +83,40 @@ class Gameboard(tk.Frame):
         color: 'r', 'g', 'b', or 'y'
         performs actions based on color selected
         '''
-        pass
+        if color == 'r':
+            print(3)
+            
+            self.redbutton.configure(
+                bg=self.colors['red'][1],
+                relief='sunken'
+                )
+            self.master.update()
 
+            time.sleep(0.25)
+
+            self.redbutton.configure(
+                bg=self.colors['red'][0],
+                relief='raised'
+                )
+            self.master.update()
+
+        if color == 'y':
+            print(3)
+            
+            self.yellowbutton.configure(
+                bg=self.colors['yellow'][1],
+                relief='sunken'
+                )
+            self.master.update()
+
+            time.sleep(0.25)
+
+            self.yellowbutton.configure(
+                bg=self.colors['yellow'][0],
+                relief='raised'
+                )
+            self.master.update()
+        
 
 
 
