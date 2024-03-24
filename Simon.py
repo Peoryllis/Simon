@@ -259,7 +259,6 @@ class Gameboard(tk.Frame):
         self.computer_sequence.append(random.randrange(4))
         choices[self.computer_sequence[-1]]()
         
-
     def update_scores(self):
         self.score = len(self.player_sequence)
 
@@ -298,7 +297,9 @@ class Gameboard(tk.Frame):
         gameOverTitle = tk.Label(
             gameOverFrame,
             text='GAME OVER',
-            font=(self.fontname, 60, 'bold'),
+            bg='white',
+            fg='black',
+            font=(self.fontname, 40, 'bold'),
         )
 
         gameOverTitle.place(relx=0, rely=0, relwidth=1, relheight=0.1)
@@ -306,18 +307,49 @@ class Gameboard(tk.Frame):
         instructions = tk.Label(
             gameOverFrame,
             text = 'Select whether you would like to go again or not',
-            font=(self.fontname, 18, 'bold')
+            bg='white',
+            fg='black',
+            font=(self.fontname, 18, 'bold'),
+            wraplength=300
         )
 
-        instructions.place(relx=0, rely=0.1, relwidth=1, relheight=0.05)
-
-        
+        instructions.place(relx=0, rely=0.1)
 
 
+        restartButton = tk.Label(
+            gameOverFrame,
+            text='Restart game',
+            font=(self.fontname, 16, 'bold'),
+            bg='white',
+            fg='black',
+            borderwidth=3,
+            relief='raised'
+        )
 
 
+        restartButton.place(relx=0.2, rely=0.6, relwidth=0.3, relheight=0.2, anchor='center')
+        restartButton.bind('<Button>', lambda e: (gameOverFrame.destroy(), self.play_game()))
+
+        endgameButton = tk.Label(
+            gameOverFrame,
+            text='End game',
+            font=(self.fontname, 18),
+            bg='white',
+            fg='black',
+            borderwidth=3,
+            relief='raised'
+        )
+
+        endgameButton.place(relx=0.8, rely=0.6, relwidth=0.3, relheight=0.2, anchor='center')
+        endgameButton.bind('<Button>', lambda e: self.master.destroy())
 
 
+    def restart(self):
+
+        self.score = 0
+        self.computer_sequence = []
+        self.player_sequence = []
+        self.playerWinning = True
 
     def play_game(self):
         '''
@@ -325,13 +357,11 @@ class Gameboard(tk.Frame):
         Plays a game of simon
         '''
 
-        self.score = 0
-        self.computer_sequence = []
-        self.playersequence = []
+        self.restart()
+
+        
 
         while self.playerWinning:
-
-            print(len(self.computer_sequence), len(self.player_sequence))
 
             if len(self.player_sequence) != len(self.computer_sequence):
                 self.title.configure(
@@ -348,7 +378,7 @@ class Gameboard(tk.Frame):
                 self.computer_turn()
 
 
-
+        self.game_over()
 
 
 simon = Gameboard(root)
