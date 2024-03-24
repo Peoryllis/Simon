@@ -359,6 +359,8 @@ class Gameboard(tk.Frame):
 
         self.restart()
 
+        time.sleep(1)
+
         
 
         while self.playerWinning:
