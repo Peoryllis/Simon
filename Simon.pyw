@@ -101,6 +101,8 @@ class Gameboard(tk.Frame):
         self.greenbutton.place(relx=0, rely=0.5, relwidth=0.5, relheight=0.5)
         self.greenbutton.bind('<Button>', lambda e: self.color_selected('g'))
 
+#create the blue button
+
         self.bluebutton = tk.Label(
             self.buttonsFrame, 
             bg=self.colors['blue'][0], 
