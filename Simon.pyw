@@ -115,17 +115,17 @@ class Gameboard(tk.Frame):
 
         self.master.update()
 
-        self.computer_sequence = []
+        self.computer_sequence = [] #keep track of computer choices
 
-        self.player_sequence = []
+        self.player_sequence = [] #keep track of user choices
 
-        self.playerTurn = False
-        self.playerWinning = True
+        self.playerTurn = False #keep track of player turn
+        self.playerWinning = True #make sureplayer sequence is right
 
     def red_selected(self):
         '''
         Gameboard.red_selected()
-        actions for when red button is selected
+        mimic red button pressed
         '''
 
         self.redbutton.configure(
@@ -145,7 +145,7 @@ class Gameboard(tk.Frame):
     def yellow_selected(self):
         '''
         Gameboard.yellow_selected()
-        actions for when yellow button is selected
+        mimic yellow button pressed
         '''
             
         self.yellowbutton.configure(
@@ -165,7 +165,7 @@ class Gameboard(tk.Frame):
     def green_selected(self):
         '''
         Gameboard.green_selected()
-        actions for when green button is selected
+        mimic green button pressed
         '''
             
         self.greenbutton.configure(
@@ -185,7 +185,7 @@ class Gameboard(tk.Frame):
     def blue_selected(self):
         '''
         Gameboard.blue_selected()
-        actions for when blue button is selected
+        mimic blue button pressed
         '''
             
         self.bluebutton.configure(
@@ -209,12 +209,12 @@ class Gameboard(tk.Frame):
         performs actions based on color selected
         '''
 
-        if not self.playerTurn:
+        if not self.playerTurn: #make sure the player is not making the mistake of choosing outside of their turn
             return None
         
         if color == 'r':
             self.red_selected()
-            self.player_sequence.append(0)
+            self.player_sequence.append(0) #add to the tracker of the user's choices
         elif color == 'y':
             self.yellow_selected()
             self.player_sequence.append(1)
@@ -224,9 +224,11 @@ class Gameboard(tk.Frame):
         elif color == 'b':
             self.blue_selected()
             self.player_sequence.append(3)
+            
+        #check to make sure the user is properly following the sequence after every selection
 
-        if self.computer_sequence[:len(self.player_sequence)] != self.player_sequence:
-            self.playerWinning = False
+        if self.computer_sequence[:len(self.player_sequence)] != self.player_sequence: 
+            self.playerWinning = False #if they chose wrong, let program know that the player lost
 
     def computer_turn(self):
         '''
@@ -239,12 +241,12 @@ class Gameboard(tk.Frame):
         self.title.configure(
             text='Computer turn',
             font=['Bodoni 72 Oldstyle', 40, 'bold']
-        )
+        ) #let user know the computer will choose
         
 
         self.master.update()
 
-        time.sleep(0.5)
+        time.sleep(0.5) #give user time to read updated title
 
         choices = {
             0: self.red_selected,
@@ -254,20 +256,24 @@ class Gameboard(tk.Frame):
         }
 
         if len(self.computer_sequence) > 0:
-            for item in self.computer_sequence:
+            for item in self.computer_sequence: #go through each selection
                 choices[item]()
-                time.sleep(0.5)
+                time.sleep(0.5) #don't gothrough selections so fast
 
-        self.computer_sequence.append(random.randrange(4))
+        self.computer_sequence.append(random.randrange(4)) #add selection to the computer sequence and play it
         choices[self.computer_sequence[-1]]()
         
     def update_scores(self):
-        self.score = len(self.player_sequence)
+        '''
+        Gameboard.update_scores()
+        updates the scores of the game
+        '''
+        self.score = len(self.player_sequence) #the length of the player sequence tells us how many turns the user made
 
-        if self.score > self.highScore:
+        if self.score > self.highScore: #update high score as needed
             self.highScore = self.score
         
-        self.scoreboard.configure(
+        self.scoreboard.configure( #update scores
             text=f'score: {self.score}'
         )
         
@@ -280,7 +286,7 @@ class Gameboard(tk.Frame):
     def game_over(self):
         '''
         Gameboard.game_over
-        gives a game over screen
+        gives a game over screen and user option to go again or quit thr game
         '''
 
         gameOverFrame = tk.Frame(
@@ -347,12 +353,20 @@ class Gameboard(tk.Frame):
 
 
     def restart(self):
+        '''
+        Gameboard.restart()
+        restarts the whole game if the user chooses to go again
+        '''
 
         self.score = 0
         self.computer_sequence = []
         self.player_sequence = []
         self.playerWinning = True
         self.playerTurn = False
+        self.title.configure(
+            text='Simon!',
+            font=(self.fontname, 60, 'bold')
+        )
 
     def play_game(self):
         '''
@@ -366,9 +380,9 @@ class Gameboard(tk.Frame):
 
         
 
-        while self.playerWinning:
-
-            if len(self.player_sequence) != len(self.computer_sequence):
+        while self.playerWinning: #end loop if the player messes up
+            #let the player guess the sequence until the length of user and computer sequences is the same
+            if len(self.player_sequence) != len(self.computer_sequence): 
                 self.title.configure(
                     text='Your turn'
                 )  
@@ -377,16 +391,16 @@ class Gameboard(tk.Frame):
 
                 self.playerTurn = True
             else:
-                self.update_scores()
-                self.player_sequence = []
-                self.playerTurn = False
+                self.update_scores() #update scores based on user sequence length
+                self.player_sequence = [] #clear user sequence so the user can repeat the computer sequence each time
+                self.playerTurn = False #don't allow the user to press a square by mistake
                 self.computer_turn()
 
 
-        self.game_over()
+        self.game_over() #show game over screen
 
 
-simon = Gameboard(root)
+simon = Gameboard(root) #create the game
 simon.play_game()
 
-root.mainloop()
+root.mainloop() 
