@@ -350,6 +350,7 @@ class Gameboard(tk.Frame):
         self.computer_sequence = []
         self.player_sequence = []
         self.playerWinning = True
+        self.playerTurn = False
 
     def play_game(self):
         '''
