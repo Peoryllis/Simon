@@ -400,6 +400,7 @@ class Gameboard(tk.Frame):
         self.game_over() #show game over screen
 
 
+
 simon = Gameboard(root) #create the game
 simon.play_game()
 
